@@ -10,11 +10,8 @@ const ProductCard = (props) => {
             <Image
                 style={styles.image}
                 resizeMode="contain"
-                source={{ uri: image ? image : "https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png", }}
+                source={{ uri: image ? image : "https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png" }}
             />
-                  <Image
-        style={styles.stretch}
-        source={{uri: "https://www.bing.com/images/search?view=detailV2&ccid=gHYgFANQ&id=0897D7AAAEA18A8DDC02FAD828153A1BD89AB8CB&thid=OIP.gHYgFANQ8_lTicSEbmqHPAHaLx&mediaurl=https%3A%2F%2Fmedia.istockphoto.com%2Fphotos%2Fsunset-waterfall-picture-id483822568&exph=1024&expw=644&q=image&simid=608019592610644593&form=IRPRST&ck=93E9C17148F01B805B4C65B2768162BA&selectedindex=8&ajaxhist=0&ajaxserp=0&cdnurl=https%3A%2F%2Fth.bing.com%2Fth%2Fid%2FR.807620140350f3f95389c4846e6a873c%3Frik%3Dy7ia2Bs6FSjY%252bg%26pid%3DImgRaw%26r%3D0&vt=0&sim=11"}}/>
             {console.log("image", image)}
             <View style={styles.card} />
             <Text style={styles.title}>
