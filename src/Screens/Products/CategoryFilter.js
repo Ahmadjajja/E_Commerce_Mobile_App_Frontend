@@ -1,6 +1,6 @@
-import { TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
+import { TouchableOpacity, ScrollView, StyleSheet, View, Text, FlatList } from 'react-native'
 import React from 'react'
-import { HStack, Badge, Text } from 'native-base'
+import { HStack, Badge, Box } from 'native-base'
 
 const CategoryFilter = (props) => {
     return (
@@ -25,26 +25,67 @@ const CategoryFilter = (props) => {
                         </Text>
                     </Badge>
                 </TouchableOpacity>
-                {
+                {/* {
                     props.categories.map((item) => {
                         <TouchableOpacity
-                            key={item._id}
+                            key={item._id.$oid}
                             onPress={() => {
-                                props.CategoryFilter(item._id), 
-                                props.setActive(props.categories.indexOf(item))
+                                props.CategoryFilter(item._id),
+                                    props.setActive(props.categories.indexOf(item))
                             }}
                         >
-                            <Badge style={[styles.center, { margin: 5, borderRadius: 30 },
-                            props.active == props.categories.indexOf(item) ? styles.active : styles.inactive
-                            ]}
-                            >
-                                <Text style={{ color: 'white' }}>
-                                    {item.name}
-                                </Text>
-                            </Badge>
+                            <Box>
+                                <Badge style={[styles.center, { margin: 5, borderRadius: 30,backgroundColor: "green" },
+                                props.active == props.categories.indexOf(item) ? styles.active : styles.inactive
+                                ]}
+                                >
+                                    <View>
+                                        <Text style={{ color: 'black',backgroundColor: 'green' }}>
+                                            haha
+                                            {console.log(item._id.$oid)}
+                                        </Text>
+                                    </View>
+
+                                </Badge>
+                            </Box>
+
                         </TouchableOpacity>
                     })
-                }
+                } */}
+                <View style={styles.listContainer}>
+                    <FlatList
+
+                        key={'#'}
+                        horizontal
+                        data={props.categories}
+                        renderItem={({ item }) =>
+                            <TouchableOpacity
+                                key={item._id.$oid}
+                                onPress={() => {
+                                    props.CategoryFilter(item._id.$oid),
+                                        props.setActive(props.categories.indexOf(item))
+                                }}
+                            >
+                                <Box>
+                                    <Badge style={[styles.center, { margin: 5, borderRadius: 30, backgroundColor: "green" },
+                                    props.active == props.categories.indexOf(item) ? styles.active : styles.inactive
+                                    ]}
+                                    >
+                                        <View>
+                                            <Text style={{ color: 'white' }}>
+                                                {item.name}
+                                                {console.log(item._id.$oid)}
+                                            </Text>
+                                        </View>
+
+                                    </Badge>
+                                </Box>
+                            </TouchableOpacity>
+
+                        }
+                        keyExtractor={(item) => item.brand}
+                    />
+                </View>
             </HStack>
         </ScrollView>
     )

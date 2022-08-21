@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, ActivityIndicator, StyleSheet, Dimensions, FlatList,ScrollView } from 'react-native'
+import { View, ActivityIndicator, StyleSheet, Dimensions, FlatList, ScrollView } from 'react-native'
 import { Container, Header, Icon, Input, Item, Text, StatusBar, Box, HStack, IconButton, VStack, Heading, Ionicons } from 'native-base'
 import ProductList from "./ProductList.js";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -38,6 +38,7 @@ const ProductContainer = () => {
     // console.log(productsCategories)
     setActive(-1)
     setInitialState(data)
+    setProductsCtg(data)
 
 
     return () => {
@@ -48,6 +49,7 @@ const ProductContainer = () => {
       setCategories([])
       setActive()
       setInitialState([])
+      setProductsCtg([])
     }
   }, [])
 
@@ -55,7 +57,7 @@ const ProductContainer = () => {
 
 
   const SearchedProduct = (text) => {
-    console.log(text.toLowerCase())
+    // console.log(text.toLowerCase())
     setProductsFiltered(
       products.filter((i) => i.name.toLowerCase().includes(text.toLowerCase()))
     )
@@ -74,14 +76,14 @@ const ProductContainer = () => {
   const changeCtg = (ctg) => {
     {
       ctg === 'all'
-      ?
-      [setProductsCtg(initialState), setActive(true)]
-      : [
-        setProductsCtg(
-          products.filter((i) => i.category._id === ctg), //here may be error
-          setActive(true)
-        ),
-      ]
+        ?
+        [setProductsCtg(initialState), setActive(true)]
+        : [
+          setProductsCtg(
+            products.filter((i) => i.category._id === ctg), //here may be error
+            setActive(true)
+          ),
+        ]
     }
   }
 
@@ -120,34 +122,59 @@ const ProductContainer = () => {
         />
       ) : (
         <ScrollView>
-          <View style={{flexDirection: 'column',flex: 1}}>
-          <View><Banner /></View>
-          <View><CategoryFilter 
-          categories={categories}
-          CategoryFilter= {changeCtg}
-          productsCtg = {productsCtg}
-          active = {active}
-          setActive={setActive}
-          /></View>
-          <View style={styles.container}>
-            <View style={styles.listContainer}>
-              <FlatList
+          <View style={{ flexDirection: 'column', flex: 1 }}>
+            <View><Banner /></View>
+            <View><CategoryFilter
+              categories={categories}
+              CategoryFilter={changeCtg}
+              productsCtg={productsCtg}
+              active={active}
+              setActive={setActive}
+            /></View>
 
-                key={'#'}
-                // horizontal
-                numColumns={2}
-                data={products}
-                renderItem={({ item }) => <ProductList
-                  key={item.brand}
-                  item={item}
-                />}
-                keyExtractor={(item) => item.brand}
-              />
-            </View>
+            {productsCtg.length > 0 ?
+              (
+                <View style={styles.listContainer}>
+                  {
+                    productsCtg.map((item) => {
+                      return (
+                        <ProductList
+                          key={item._id.$oid}
+                          item={item}
+                        />
+                      )
+                    })
+                  }
+
+                </View>
+              ) : (
+                <View style={[styles.center, { height: height / 2 }]}>
+                  <Text>No products found</Text>
+                </View>
+              )
+
+            }
+
+
+            {/* <View style={styles.container}>
+              <View style={styles.listContainer}>
+                <FlatList
+
+                  key={'#'}
+                  // horizontal
+                  numColumns={2}
+                  data={products}
+                  renderItem={({ item }) => <ProductList
+                    key={item.brand}
+                    item={item}
+                  />}
+                  keyExtractor={(item) => item.brand}
+                />
+              </View>
+            </View> */}
           </View>
-        </View>
         </ScrollView>
-        
+
       )}
 
     </>
@@ -170,6 +197,9 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     backgroundColor: "gainsboro",
     marginBottom: 100,
+  }, center: {
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
