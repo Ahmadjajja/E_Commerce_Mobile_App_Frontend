@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignContent: 'center',
         justifyContent: 'center',
-        paddding: 20,
-        marginTop: 80, //Todo: Delete
+        // padding: 20,
+        marginTop: 20, //Todo: Delete
     }
   })
