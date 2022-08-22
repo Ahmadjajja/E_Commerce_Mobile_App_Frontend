@@ -6,12 +6,19 @@ import ProductCard from "./ProductCard"
 var { width } = Dimensions.get("window")
 
 const ProductList = (props) => {
-    const { item } = props;
+    const { item ,navigation} = props;
     return (
-        <TouchableOpacity >
+        <TouchableOpacity 
+        // style={{width: 50%}}
+        onPress={()=>{
+            props.navigation.navigate("ProductDetails", { item: item})
+            // props.navigation.navigate("ProductDetails", {item: item})
+            console.log("props in productList=>", item)
+        }}
+        >
             <View style={{
                 width: width / 2,
-                backgroundColor: 'gainsboro'
+                backgroundColor: 'gainsboro' 
             }}>
                 <ProductCard {...item} />
             </View>
