@@ -59,7 +59,7 @@ const ProductContainer = () => {
   const SearchedProduct = (text) => {
     // console.log(text.toLowerCase())
     setProductsFiltered(
-      products.filter((i) => i.name.toLowerCase().includes(text.toLowerCase()))
+      products.filter((item) => item.name.toLowerCase().includes(text.toLowerCase()))
     )
   }
 
@@ -80,7 +80,7 @@ const ProductContainer = () => {
         [setProductsCtg(initialState), setActive(true)]
         : [
           setProductsCtg(
-            products.filter((i) => i.category._id === ctg), //here may be error
+            products.filter((i) => i.category.$oid === ctg), //here may be error
             setActive(true)
           ),
         ]
@@ -123,16 +123,20 @@ const ProductContainer = () => {
       ) : (
         <ScrollView>
           <View style={{ flexDirection: 'column', flex: 1 }}>
-            <View><Banner /></View>
-            <View><CategoryFilter
-              categories={categories}
-              CategoryFilter={changeCtg}
-              productsCtg={productsCtg}
-              active={active}
-              setActive={setActive}
-            /></View>
+            <View>
+              <Banner />
+            </View>
+            <View>
+              <CategoryFilter
+                categories={categories}
+                CategoryFilter={changeCtg}
+                productsCtg={productsCtg}
+                active={active}
+                setActive={setActive}
+              />
+            </View>
 
-            {productsCtg.length > 0 ?
+            {productsCtg.length > 0 ?  //may be filtered products but not yet confirm confusion going on
               (
                 <View style={styles.listContainer}>
                   {
@@ -190,13 +194,13 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   listContainer: {
-    height: height,
+    // minHeight: height,
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
     flexWrap: "wrap",
     backgroundColor: "gainsboro",
-    marginBottom: 100,
+    paddingBottom: 50,
   }, center: {
     justifyContent: "center",
     alignItems: "center"
