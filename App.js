@@ -1,4 +1,4 @@
-import { LogBox } from 'react-native'
+import { LogBox, View } from 'react-native'
 import React from 'react'
 import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native'
@@ -6,6 +6,9 @@ import { NavigationContainer } from '@react-navigation/native'
 //Navigators
 import Main from './src/Navigators/Main'
 
+//Redux
+import { Provider } from 'react-redux';
+import store from './src/Redux/Store';
 
 //screens
 import ProductContainer from './src/Screens/Products/ProductContainer'
@@ -14,12 +17,15 @@ import Header from "./src/Shared/Header"
 const App = () => {
   LogBox.ignoreAllLogs()
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
+    <Provider store={store}>
+      <NativeBaseProvider >
+        <NavigationContainer >
           <Header />
           <Main />
+        </NavigationContainer>
       </NativeBaseProvider>
-    </NavigationContainer>
+    </Provider>
+
 
   )
 }

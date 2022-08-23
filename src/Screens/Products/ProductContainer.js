@@ -145,7 +145,7 @@ const ProductContainer = (props) => {
                     productsCtg.map((item) => {
                       return (
                         <ProductList
-                          navigation= {props.navigation}
+                          navigation= { props.navigation }
                           key={item._id.$oid}
                           item={item}
                         />
@@ -195,9 +195,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     backgroundColor: "gainsboro",
     paddingBottom: 50,
+    height: height,
   },
   listContainer: {
     // minHeight: height,
+    
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",

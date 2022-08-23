@@ -12,7 +12,7 @@ const ProductList = (props) => {
         // style={{width: 50%}}
         onPress={()=>{
             props.navigation.navigate("ProductDetails", { item: item})
-            // props.navigation.navigate("ProductDetails", {item: item})
+            
             console.log("props in productList=>", item)
         }}
         >
