@@ -1,7 +1,11 @@
-import { Image, View, StyleSheet, Text, ScrollView, Button ,Dimensions} from 'react-native'
+import { Image, View, StyleSheet, Text, ScrollView, Button, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
-import { Left, Right, Container, H1,HStack } from "native-base"
+import { Left, Right, Container, H1, HStack } from "native-base"
+
+//  REDUX
+import { connect } from 'react-redux'
+import * as actions from '../../Redux/Actions/cartActions'
 
 var { height } = Dimensions.get('window')
 
@@ -30,14 +34,28 @@ const SingleProducts = (props) => {
                 </View>
             </ScrollView>
             {/* <View > */}
-                <HStack style={styles.bottomContainer}>
-                    <Text style={styles.price}>$ {item.price}</Text>
-                    <Button style={styles.AddButton} title='Add' />
-                </HStack>
+            <HStack style={styles.bottomContainer}>
+                <Text style={styles.price}>$ {item.price}</Text>
+                <Button
+                    style={styles.AddButton}
+                    title='Add'
+                    onPress={() => {
+                        props.addItemToCart(props.route.params.item)
+                        // console.log("props in Single Product",props.route.params.item)
+                    }}
+                />
+            </HStack>
 
             {/* </View> */}
         </View>
     )
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addItemToCart: (product) =>
+            dispatch(actions.addToCart({ quantity: 1, product }))
+    }
 }
 
 const styles = StyleSheet.create({
@@ -72,10 +90,10 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flexDirection: 'row',
         width: "100%",
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         // alignItems: 'flex-end',
         paddingHorizontal: 10,
-        paddingBottom:10,
+        paddingBottom: 10,
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -84,7 +102,7 @@ const styles = StyleSheet.create({
     price: {
         fontSize: 24,
         color: 'red',
-    },AddButton:{
+    }, AddButton: {
         // marginRight: 10
     }
     // availabilityContainer: {
@@ -98,4 +116,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default SingleProducts
+export default connect(null, mapDispatchToProps)(SingleProducts)

@@ -1,6 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, Dimensions, Image, Button } from 'react-native';
 
+import { connect } from 'react-redux'
+import * as actions from '../../Redux/Actions/cartActions'
+
+
 var { width } = Dimensions.get("window")
 
 const ProductCard = (props) => {
@@ -16,20 +20,35 @@ const ProductCard = (props) => {
             <View style={styles.card} />
             <Text style={styles.title}>
                 {name.length > 15 ? name.substring(0, 15 - 3)
-                    + "..." : name 
+                    + "..." : name
                 }
             </Text>
             <Text style={styles.price}>
                 ${price}
             </Text>
             {countInStock > 0 ? (
-                <View style={{marginBottom: 60}}>
-                    <Button title={'Add'} color={'green'} />
+                <View style={{ marginBottom: 60 }}>
+                    <Button
+                        color={'green'}
+                        title='Add'
+                        onPress={() => {
+                            props.addItemToCart(props)
+                            // console.log("props in product card",props)
+                        }}
+                    />
                 </View>
             ) : <Text style={{ marginTop: 100 }}>Currently Unavailable</Text>}
         </View>
     )
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addItemToCart: (product) =>
+            dispatch(actions.addToCart({ quantity: 1, product }))
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -70,4 +89,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ProductCard
+export default connect(null, mapDispatchToProps)(ProductCard)

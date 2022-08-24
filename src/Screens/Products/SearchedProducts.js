@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
-import { Avatar, VStack, ListItem, Thumbnail, Text, HStack, Divider } from 'native-base';
+import { Avatar, VStack, Text, HStack, Divider } from 'native-base';
 
 var { width } = Dimensions.get("window")
 

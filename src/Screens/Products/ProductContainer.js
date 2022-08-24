@@ -13,7 +13,7 @@ const productsCategories = require('../../assets/data/categories.json')
 var { height } = Dimensions.get('window')
 
 const ProductContainer = (props) => {
-
+ 
   const [products, setProducts] = useState([]);
   const [productsFiltered, setProductsFiltered] = useState([])
   const [focus, setFocus] = useState();
