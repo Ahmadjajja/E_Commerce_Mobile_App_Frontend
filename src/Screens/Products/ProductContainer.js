@@ -7,13 +7,16 @@ import SearchedProducts from './SearchedProducts.js';
 import Banner from "../../Shared/Banner"
 import CategoryFilter from "./CategoryFilter"
 
-const data = require('../../assets/data/products.json')
-const productsCategories = require('../../assets/data/categories.json')
+import baseURL from "../../assets/common/baseUrl"
+import axios from 'axios';
+
+// const data = require('../.. /assets/data/products.json')
+// const productsCategories = require('../../assets/data/categories.json')
 
 var { height } = Dimensions.get('window')
 
 const ProductContainer = (props) => {
- 
+
   const [products, setProducts] = useState([]);
   const [productsFiltered, setProductsFiltered] = useState([])
   const [focus, setFocus] = useState();
@@ -28,17 +31,36 @@ const ProductContainer = (props) => {
 
 
   useEffect(() => {
-    setProducts(data)
-    // console.log(products)
-    setProductsFiltered(data);
-    // console.log('productsFiltered' , productsFiltered)
+
+ 
     setFocus(false)
-    // console.log(focus)
-    setCategories(productsCategories)
-    // console.log(productsCategories)
     setActive(-1)
-    setInitialState(data)
-    setProductsCtg(data)
+
+    axios
+      .get(`${baseURL}products`)
+      .then((res) => {
+        setProducts(res.data)
+        setProductsFiltered(res.data);
+        setProductsCtg(res.data)
+        setInitialState(res.data)
+        console.log(res.data)
+
+
+      })
+      .catch((error) => {
+        console.log("Api call error", error)
+      })
+
+    //Categories
+    axios
+      .get(`${baseURL}categories`)
+      .then((res) => {
+        console.log(res.data)
+        setCategories(res.data) 
+      })
+      .catch((error) => {
+        console.log("Api call error", error)
+      })
 
 
     return () => {
@@ -80,7 +102,7 @@ const ProductContainer = (props) => {
         [setProductsCtg(initialState), setActive(true)]
         : [
           setProductsCtg(
-            products.filter((i) => i.category.$oid === ctg), //here may be error
+            products.filter((i) => i.category._id === ctg), //here may be error
             setActive(true)
           ),
         ]
@@ -118,7 +140,7 @@ const ProductContainer = (props) => {
 
       {focus == true ? (
         <SearchedProducts
-          navigation =  { props.navigation }
+          navigation={props.navigation}
           productsFiltered={productsFiltered}
 
         />
@@ -145,7 +167,7 @@ const ProductContainer = (props) => {
                     productsCtg.map((item) => {
                       return (
                         <ProductList
-                          navigation= { props.navigation }
+                          navigation={props.navigation}
                           key={item._id.$oid}
                           item={item}
                         />
@@ -199,7 +221,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     // minHeight: height,
-    
+
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
