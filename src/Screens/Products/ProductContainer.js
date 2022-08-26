@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, ActivityIndicator, StyleSheet, Dimensions, FlatList, ScrollView } from 'react-native'
 import { Container, Header, Icon, Input, Item, Text, StatusBar, Box, HStack, IconButton, VStack, Heading, Ionicons } from 'native-base'
 import ProductList from "./ProductList.js";
@@ -6,6 +6,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SearchedProducts from './SearchedProducts.js';
 import Banner from "../../Shared/Banner"
 import CategoryFilter from "./CategoryFilter"
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import baseURL from "../../assets/common/baseUrl"
 import axios from 'axios';
@@ -24,56 +26,64 @@ const ProductContainer = (props) => {
   const [productsCtg, setProductsCtg] = useState([])
   const [active, setActive] = useState()
   const [initialState, setInitialState] = useState([])
+  const [loading, setLoading] = useState(true)
 
 
 
+  useFocusEffect((
+    useCallback(
+      () => {
+
+
+        setFocus(false)
+        setActive(-1)
+
+        axios
+          .get(`${baseURL}products`)
+          .then((res) => {
+            setProducts(res.data)
+            setProductsFiltered(res.data);
+            setProductsCtg(res.data)
+            setInitialState(res.data)
+            setLoading(false)
+            console.log(res.data)
+
+
+          })
+          .catch((error) => {
+            console.log("Api call error", error)
+          })
+
+        //Categories
+        axios
+          .get(`${baseURL}categories`)
+          .then((res) => {
+            console.log(res.data)
+            setCategories(res.data)
+          })
+          .catch((error) => {
+            console.log("Api call error", error)
+          })
+
+
+        return () => {
+          setProducts([])
+          // console.log(products)
+          setProductsFiltered([]);
+          setFocus()
+          setCategories([])
+          setActive()
+          setInitialState([])
+          setProductsCtg([])
+        }
+      },
+      [],
+    )
+
+  ))
 
 
 
-  useEffect(() => {
-
- 
-    setFocus(false)
-    setActive(-1)
-
-    axios
-      .get(`${baseURL}products`)
-      .then((res) => {
-        setProducts(res.data)
-        setProductsFiltered(res.data);
-        setProductsCtg(res.data)
-        setInitialState(res.data)
-        console.log(res.data)
-
-
-      })
-      .catch((error) => {
-        console.log("Api call error", error)
-      })
-
-    //Categories
-    axios
-      .get(`${baseURL}categories`)
-      .then((res) => {
-        console.log(res.data)
-        setCategories(res.data) 
-      })
-      .catch((error) => {
-        console.log("Api call error", error)
-      })
-
-
-    return () => {
-      setProducts([])
-      // console.log(products)
-      setProductsFiltered([]);
-      setFocus()
-      setCategories([])
-      setActive()
-      setInitialState([])
-      setProductsCtg([])
-    }
-  }, [])
 
 
 
@@ -111,101 +121,105 @@ const ProductContainer = (props) => {
 
   return (
     <>
-
-      {/* <Box safeAreaTop /> */}
-      <HStack py="3" justifyContent="space-between" alignItems="center" w="900%" maxW="350">
-        <HStack >
-          <Input
-            placeholder="Search"
-            variant="filled"
-            width="100%"
-            borderRadius="10"
-            py="1"
-            px="2"
-            borderWidth="0"
-            InputLeftElement={<FontAwesome style={{ paddingLeft: 10 }} name="search" size={20} color="black" />}
-            onFocus={openList}
-            InputRightElement={
-              focus == true ?
-                <FontAwesome name="close" style={{ paddingRight: 10 }} size={20} color="black" onPress={onBlur} />
-                : null
-            }
-
-            onChangeText={(text) => SearchedProduct(text)}
-          />
-
-        </HStack>
-      </HStack>
-      {/* {console.log(focus)} */}
-
-      {focus == true ? (
-        <SearchedProducts
-          navigation={props.navigation}
-          productsFiltered={productsFiltered}
-
-        />
-      ) : (
-        <ScrollView>
-          <View style={{ flexDirection: 'column', flex: 1 }}>
-            <View>
-              <Banner />
-            </View>
-            <View>
-              <CategoryFilter
-                categories={categories}
-                CategoryFilter={changeCtg}
-                productsCtg={productsCtg}
-                active={active}
-                setActive={setActive}
-              />
-            </View>
-
-            {productsCtg.length > 0 ?  //may be filtered products but not yet confirm confusion going on
-              (
-                <View style={styles.listContainer}>
-                  {
-                    productsCtg.map((item) => {
-                      return (
-                        <ProductList
-                          navigation={props.navigation}
-                          key={item._id.$oid}
-                          item={item}
-                        />
-                      )
-                    })
+      {
+        loading == false ? (
+          <Box>
+            <HStack py="3" justifyContent="space-between" alignItems="center" w="900%" maxW="350">
+              <HStack >
+                <Input
+                  placeholder="Search"
+                  variant="filled"
+                  width="100%"
+                  borderRadius="10"
+                  py="1"
+                  px="2"
+                  borderWidth="0"
+                  InputLeftElement={<FontAwesome style={{ paddingLeft: 10 }} name="search" size={20} color="black" />}
+                  onFocus={openList}
+                  InputRightElement={
+                    focus == true ?
+                      <FontAwesome name="close" style={{ paddingRight: 10 }} size={20} color="black" onPress={onBlur} />
+                      : null
                   }
 
-                </View>
-              ) : (
-                <View style={[styles.center, { height: height / 2 }]}>
-                  <Text>No products found</Text>
-                </View>
-              )
-
-            }
-
-
-            {/* <View style={styles.container}>
-              <View style={styles.listContainer}>
-                <FlatList
-
-                  key={'#'}
-                  // horizontal
-                  numColumns={2}
-                  data={products}
-                  renderItem={({ item }) => <ProductList
-                    key={item.brand}
-                    item={item}
-                  />}
-                  keyExtractor={(item) => item.brand}
+                  onChangeText={(text) => SearchedProduct(text)}
                 />
-              </View>
-            </View> */}
-          </View>
-        </ScrollView>
 
-      )}
+              </HStack>
+            </HStack>
 
+            {focus == true ? (
+              <SearchedProducts
+                navigation={props.navigation}
+                productsFiltered={productsFiltered}
+
+              />
+            ) : (
+              <ScrollView>
+                <View style={{ flexDirection: 'column', flex: 1 }}>
+                  <View>
+                    <Banner />
+                  </View>
+                  <View>
+                    <CategoryFilter
+                      categories={categories}
+                      CategoryFilter={changeCtg}
+                      productsCtg={productsCtg}
+                      active={active}
+                      setActive={setActive}
+                    />
+                  </View>
+
+                  {productsCtg.length > 0 ?  //may be filtered products but not yet confirm confusion going on
+                    (
+                      <View style={styles.listContainer}>
+                        {
+                          productsCtg.map((item) => {
+                            return (
+                              <ProductList
+                                navigation={props.navigation}
+                                key={item._id.$oid}
+                                item={item}
+                              />
+                            )
+                          })
+                        }
+
+                      </View>
+                    ) : (
+                      <View style={[styles.center, { height: height / 2 }]}>
+                        <Text>No products found</Text>
+                      </View>
+                    )
+
+                  }
+                </View>
+              </ScrollView>
+            )}
+            {/* <View style={styles.container}>
+                  <View style={styles.listContainer}>
+                    <FlatList
+
+                      key={'#'}
+                      // horizontal
+                      numColumns={2}
+                      data={products}
+                      renderItem={({ item }) => <ProductList
+                        key={item.brand}
+                        item={item}
+                      />}
+                      keyExtractor={(item) => item.brand}
+                    />
+                  </View>
+                </View> */}
+          </Box>
+
+        ) : (
+          <Box style={[styles.center, {backgroundColor: '#f2f2f2', flex: 1,}]}>
+            <ActivityIndicator size="large" color="red" />
+          </Box>
+      )
+      }
     </>
 
   )
@@ -230,7 +244,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   }, center: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center" ,
   }
 });
 
