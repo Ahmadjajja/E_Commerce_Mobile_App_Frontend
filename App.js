@@ -2,7 +2,7 @@ import { LogBox, View } from 'react-native'
 import React from 'react'
 import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native'
-
+import Toast from "react-native-toast-message"
 //Navigators
 import Main from './src/Navigators/Main'
 
@@ -22,6 +22,7 @@ const App = () => {
         <NavigationContainer >
           <Header />
           <Main />
+          <Toast ref={(ref) => setRef(ref)} />
         </NavigationContainer>
       </NativeBaseProvider>
     </Provider>

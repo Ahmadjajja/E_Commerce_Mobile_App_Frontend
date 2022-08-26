@@ -1,42 +1,59 @@
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 import FormContainer from '../../Shared/Form/FormContainer';
 import Input from '../../Shared/Form/Input';
-
+import Error from "../../Shared/Error"
 
 
 const Login = (props) => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+
+    const handleSubmit = () => {
+        const user = {
+            email,
+            password
+        }
+        if (email === "" || password === "") {
+            setError("Please fill in your credential")
+        } else {
+            console.log('success')
+        }
+        console.log('user', user)
+        setEmail('')
+        setPassword('')
+    }
 
     return (
         <FormContainer title={"Login"} >
             <Input
-            placeholder={"Enter Email"}
-            name={"email"}
-            id={"email"}
-            value={email}
-            onChangeText={ (Text) => setEmail(Text)}
+                placeholder={"Enter Email"}
+                name={"email"}
+                id={"email"}
+                value={email}
+                onChangeText={(Text) => setEmail(Text.toLowerCase())}
             />
             <Input
-            placeholder={"Enter Password"}
-            name={"password"}
-            id={"password"}
-            value={password}
-            onChangeText={ (Text) => setPassword(Text)}
-            secureTextEntry={true}
+                placeholder={"Enter Password"}
+                name={"password"}
+                id={"password"}
+                value={password}
+                onChangeText={(Text) => setPassword(Text)}
+                secureTextEntry={true}
             />
             <View style={styles.buttonGroup}>
-            <Button title="Login"/>
+                { error ? <Error message={error}/> : null }
+                <Button title="Login" onPress={() => handleSubmit()}/>
             </View>
-            <View style={[{marginTop: 40},styles.buttonGroup]}>
-            <Text style={styles.middleText}>
-                Don't have an account yet?
-            </Text>
-            <Button
-            title="Register" onPress={() => props.navigation.navigate("Register")}
-            />
+            <View style={[{ marginTop: 40 }, styles.buttonGroup]}>
+                <Text style={styles.middleText}>
+                    Don't have an account yet?
+                </Text>
+                <Button
+                    title="Register" onPress={() => props.navigation.navigate("Register")}
+                />
             </View>
         </FormContainer >
     )

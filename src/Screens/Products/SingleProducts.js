@@ -1,7 +1,8 @@
 import { Image, View, StyleSheet, Text, ScrollView, Button, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
-import { Left, Right, Container, H1, HStack } from "native-base"
+import { Left, Right, Container, Heading, HStack } from "native-base"
+import Toast from 'react-native-toast-message'
 
 //  REDUX
 import { connect } from 'react-redux'
@@ -29,8 +30,8 @@ const SingleProducts = (props) => {
                     />
                 </View>
                 <View style={styles.contentContainer}>
-                    <Text style={styles.contentHeader}>{item.name}</Text>
-                    <Text style={styles.contentText}>{item.brand}</Text>
+                    <Heading style={styles.contentHeader}>{item.name}</Heading>
+                    <Heading style={styles.contentText} size="md">{item.brand}</Heading>
                 </View>
             </ScrollView>
             {/* <View > */}
@@ -40,7 +41,13 @@ const SingleProducts = (props) => {
                     style={styles.AddButton}
                     title='Add'
                     onPress={() => {
-                        props.addItemToCart(props.route.params.item)
+                        props.addItemToCart(props.route.params.item),
+                        Toast.show({
+                            topOffset: 60,
+                            type: "success",
+                            text1: `${item.name} added to Cart`, 
+                            text2: "Go to your cart to complete order  "
+                        })
                         // console.log("props in Single Product",props.route.params.item)
                     }}
                 />
@@ -79,12 +86,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     contentHeader: {
-        fontWeight: 'bold',
         marginBottom: 20
     },
     contentText: {
         fontSize: 18,
-        fontWeight: 'bold',
         marginBottom: 20
     },
     bottomContainer: {

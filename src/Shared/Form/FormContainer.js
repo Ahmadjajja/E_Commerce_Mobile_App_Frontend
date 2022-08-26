@@ -1,4 +1,5 @@
 import { ScrollView, Dimensions, StyleSheet, Text } from 'react-native'
+import {Heading} from 'native-base'
 import React from 'react'
 
 var { width } = Dimensions.get('window');
@@ -6,7 +7,7 @@ var { width } = Dimensions.get('window');
 const FormContainer = (props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text contentContainerStyle={styles.title}>{props.title}</Text>
+      <Heading >{props.title}</Heading>
       {props.children}
     </ScrollView>
   )
@@ -18,12 +19,7 @@ const styles = StyleSheet.create({
         marginBottom: 400,
         width: width,
         justifyContent: 'center',
-        alignItems: 'center',
-        // paddingBottom: 40
-    },
-    title: {
-        fontsize: 30,
-        fontWeight: "bold"
+        alignItems: 'center'
     }
 })
 
