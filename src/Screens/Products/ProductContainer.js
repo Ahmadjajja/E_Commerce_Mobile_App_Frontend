@@ -123,7 +123,7 @@ const ProductContainer = (props) => {
     <>
       {
         loading == false ? (
-          <Box>
+          <Box style={{paddingBottom: 50}}>
             <HStack py="3" justifyContent="space-between" alignItems="center" w="900%" maxW="350">
               <HStack >
                 <Input

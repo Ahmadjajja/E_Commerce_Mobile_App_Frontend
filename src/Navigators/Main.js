@@ -61,7 +61,8 @@ const Main = () => {
                 }}
 
             />
-            <Tab.Screen
+
+            {/* <Tab.Screen
                 name="Admin"
                 component={UserNavigator}
                 options={{
@@ -76,7 +77,8 @@ const Main = () => {
                     headerShown: false,
                 }}
 
-            />
+            /> */}
+
             <Tab.Screen
                 name="User"
                 component={UserNavigator}

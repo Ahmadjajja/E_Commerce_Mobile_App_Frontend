@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useContext } from 'react'
 import { View, Dimensions, StyleSheet, Button, TouchableOpacity, ScrollView } from 'react-native'
 import {  VStack, Text, HStack, Divider} from 'native-base'
 import { SwipeListView } from 'react-native-swipe-list-view'
@@ -10,11 +10,14 @@ import CartItem from "./CartItem"
 //  REDUX
 import { connect } from 'react-redux'
 import * as actions from '../../Redux/Actions/cartActions'
+import AuthGlobal from "../../Context/store/AuthGlobal"
 
 var { height, width } = Dimensions.get('window')
 // var { width } = Dimensions.get('window')
 
 const Cart = (props) => {
+
+  const context = useContext(AuthGlobal)
 
   var total = 0;
   props.cartItems.forEach(cart => {
@@ -66,13 +69,27 @@ const Cart = (props) => {
             >
               <Text style={[styles.price, { width: "50%" }]}>${total.toFixed(1)}</Text>
               <View style={[styles.buttonContainer, { width: "50%" }]}>
-                <Button title="Clear"
+                <Button 
+                color="red"
+                title="Clear"
                   onPress={() => props.clearCart()}
                 />
-                <Button
-                  title="Checkout"
-                  onPress={() => props.navigation.navigate('Checkout')}
-                />
+                {
+                  context.stateUser.isAuthenticated ? (
+                    <Button
+                    color="green"
+                    title="Checkout"
+                    onPress={() => props.navigation.navigate('Checkout')}
+                  />
+                  ): (
+                    <Button
+                    // color="green"
+                    title="Login"
+                    onPress={() => props.navigation.navigate('Login')}
+                    
+                  />
+                  )
+                }
               </View>
             </HStack>
           </VStack>
@@ -123,7 +140,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   }, buttonContainer: {
     flexDirection: 'row', 
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     paddingBottom: 5,
   }, hiddenContainer: {
