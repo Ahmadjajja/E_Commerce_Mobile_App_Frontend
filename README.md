@@ -1,5 +1,5 @@
 # Frontend of E-Commerce Mobile App 
-E-Commerce Mobile App have following functionalities: <br /> <br />
+Frontend E-Commerce Mobile App have following functionalities: <br /> <br />
 **1- User Registration and Login:** <br /> <br />
 
 Users can create an account or log in to the app.   <br />
